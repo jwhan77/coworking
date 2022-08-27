@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/coworking/static/css/main.073c9b0a.css",
+    "main.js": "/coworking/static/js/main.55b49e06.js",
+    "static/js/787.64fed9b0.chunk.js": "/coworking/static/js/787.64fed9b0.chunk.js",
+    "static/media/logo.svg": "/coworking/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/coworking/index.html",
+    "main.073c9b0a.css.map": "/coworking/static/css/main.073c9b0a.css.map",
+    "main.55b49e06.js.map": "/coworking/static/js/main.55b49e06.js.map",
+    "787.64fed9b0.chunk.js.map": "/coworking/static/js/787.64fed9b0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.55b49e06.js"
+  ]
+}
