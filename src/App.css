@@ -1,8 +1,18 @@
 .App {
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
 }
 
-#map {
-  width: 600px;
-  height: 400px;
+main {
+  display: flex;
+}
+
+aside {
+  width: 300px;
+  background-color: red;
+}
+
+section {
+  width: calc(100% - 300px);
+  background-color: green;
 }

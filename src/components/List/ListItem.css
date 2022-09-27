@@ -1,0 +1,39 @@
+.ListItem {
+  display: flex;
+  height: 80px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.ListItem .photo {
+  width: 30%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  padding: 10px 5px;
+}
+
+.ListItem .info {
+  width: 70%;
+  border: 1px solid black;
+  padding: 20px 10px;
+}
+
+.ListItem .info .name {
+  font-size: 18px;
+}
+
+.ListItem .info .distance {
+  font-size: 12px;
+}
+
+.ListItem .info .open {
+  display: none;
+  position: absolute;
+  margin-left: 175px;
+  margin-top: -35px;
+}
+
+.ListItem .info:hover .open {
+  display: inline;
+}
