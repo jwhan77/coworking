@@ -45,6 +45,6 @@
     ]
   },
   "devDependencies": {
-    "kakao.maps.d.ts": "^0.1.33"
+    "@types/navermaps": "^3.0.17"
   }
 }
