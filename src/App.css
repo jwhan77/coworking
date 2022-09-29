@@ -9,10 +9,10 @@ main {
 
 aside {
   width: 300px;
-  background-color: red;
+  height: 100vh;
+  overflow: auto;
 }
 
 section {
   width: calc(100% - 300px);
-  background-color: green;
 }

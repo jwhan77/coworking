@@ -3,6 +3,8 @@ import './App.css';
 import List from './components/List/List';
 import Map from './components/Map/Map';
 
+import { data } from './data'
+
 function App() {
   useEffect(() => {
     // const mapOptions = {
@@ -18,7 +20,7 @@ function App() {
       <header></header>
       <main>
         <aside>
-          <List />
+          <List items={data} />
         </aside>
         <section>
           <Map />

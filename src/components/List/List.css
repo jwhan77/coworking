@@ -1,0 +1,7 @@
+.List {
+  border: 1px solid #B7C4CF;
+}
+
+.List > div:not(:last-child) {
+  border-bottom: 1px solid #B7C4CF;
+}

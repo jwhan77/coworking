@@ -1,7 +1,6 @@
 .ListItem {
   display: flex;
   height: 80px;
-  border: 1px solid #B7C4CF;
   cursor: pointer;
 }
 
@@ -29,7 +28,16 @@
   font-size: 12px;
 }
 
-.ListItem .info .open {
+.ListItem .open {
+  display: none;
+  align-items: center;
+}
+
+.ListItem:hover .open {
+  display: flex;
+}
+
+/* .ListItem .info .open {
   display: none;
   position: absolute;
   margin-left: 175px;
@@ -38,4 +46,4 @@
 
 .ListItem .info:hover .open {
   display: inline;
-}
+} */

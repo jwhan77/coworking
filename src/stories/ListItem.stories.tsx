@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import ListItem from '../components/List/ListItem';
 
 import img from '../assets/workspace1.jpg';
@@ -7,21 +7,24 @@ import img from '../assets/workspace1.jpg';
 export default {
   title: 'ListItem',
   component: ListItem,
+  args: {
+    lat: 37.3595704, 
+    lng: 127.105399
+  },
   decorators: [
     (Story: Function) => (
-      <div style={{width: "300px"}}>
+      <div style={{width: "300px", border: "1px solid #B7C4CF"}}>
         <Story />
       </div>
     )
   ]
-} as Meta<typeof ListItem>;
+} as ComponentMeta<typeof ListItem>;
 
-const Template: Story<typeof ListItem> = (args) => (
-  <ListItem {...args} />
-)
+const Template: ComponentStory<typeof ListItem> = (args) => <ListItem {...args} />
 
-export const Item1: Story<typeof ListItem> = Template.bind({});
+export const Item1 = Template.bind({});
 Item1.args = {
-  imgSrc: img,
-  name: "cafe 1"
+  id: 1,
+  name: 'name1',
+  imgSrc: img
 }
