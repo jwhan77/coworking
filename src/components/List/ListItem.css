@@ -36,14 +36,3 @@
 .ListItem:hover .open {
   display: flex;
 }
-
-/* .ListItem .info .open {
-  display: none;
-  position: absolute;
-  margin-left: 175px;
-  margin-top: -35px;
-}
-
-.ListItem .info:hover .open {
-  display: inline;
-} */

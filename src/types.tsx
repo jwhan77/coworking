@@ -1,5 +1,6 @@
 export interface Space {
   id: number;
+  type: "coworking" | "cafe";
   name: string;
   imgSrc: string;
   lat: number,

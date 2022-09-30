@@ -4,7 +4,7 @@ import type { Space } from '../../types';
 
 import './ListItem.css';
 
-const ListItem = ({id, imgSrc, name, lat, lng}: Space) => {
+const ListItem = ({id, type, imgSrc, name, lat, lng}: Space) => {
   return (
     <div className='ListItem'>
       <div className='photo'>

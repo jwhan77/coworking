@@ -1,7 +1,22 @@
 .List {
+  height: 100vh;
+  overflow-y: auto;
   border: 1px solid #B7C4CF;
 }
 
-.List > div:not(:last-child) {
+.List .SelectType {
+  display: flex;
+  justify-content: space-evenly;
+  height: 60px;
   border-bottom: 1px solid #B7C4CF;
 }
+
+.List .SelectType div {
+  display: flex;
+  align-items: center;
+}
+
+.List .items > div:not(:last-child) {
+  border-bottom: 1px solid #B7C4CF;
+}
+

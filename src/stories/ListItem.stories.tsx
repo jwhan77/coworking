@@ -22,9 +22,18 @@ export default {
 
 const Template: ComponentStory<typeof ListItem> = (args) => <ListItem {...args} />
 
-export const Item1 = Template.bind({});
-Item1.args = {
+export const Coworking = Template.bind({});
+Coworking.args = {
   id: 1,
   name: 'name1',
+  type: 'coworking',
+  imgSrc: img
+}
+
+export const Cafe = Template.bind({});
+Cafe.args = {
+  id: 2,
+  name: 'cafe1',
+  type: 'cafe',
   imgSrc: img
 }
