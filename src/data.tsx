@@ -3,7 +3,7 @@ import { Space } from "./types";
 import img from './assets/workspace1.jpg'
 
 export const data: Array<Space> = [
-  { id: 0, type: 'coworking', name: '오피스제주', imgSrc: img, lat: 33.4995687, lng: 126.5311287 },
+  { id: 0, type: 'coworking', name: '오피스제주', imgSrc: img, lat: 33.5330619, lng: 126.6309226 },
   { id: 1, type: 'coworking', name: '바나나오피스', imgSrc: img, lat: 33.4872052, lng: 126.485102 },
   { id: 2, type: 'coworking', name: '아이데스크', imgSrc: img, lat: 33.4821041, lng: 126.4987068 },
   { id: 3, type: 'coworking', name: '오피스제주 사계점', imgSrc: img, lat: 33.2341846, lng: 126.2905231 },

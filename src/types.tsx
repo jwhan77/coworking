@@ -7,6 +7,12 @@ export interface Space {
   lng: number
 }
 
+export interface Location {
+  lat: number,
+  lng: number
+}
+
 export interface ListProps {
   items: Space[];
+  currentLocation: Location
 }

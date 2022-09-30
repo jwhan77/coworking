@@ -1,28 +1,39 @@
-import React, { useEffect } from 'react';
-import './App.css';
+import React, { useState } from 'react';
+
 import List from './components/List/List';
 import Map from './components/Map/Map';
 
 import { data } from './data'
 
+import './App.css';
+
 function App() {
-  useEffect(() => {
-    // const mapOptions = {
-    //   center: new naver.maps.LatLng(37.3595704, 127.105399),
-    //   zoom: 10
-    // };
-    
-    // const map = new naver.maps.Map('map', mapOptions);
-    // const size = new naver.maps.Size(600, 400);
-  }, []);
+  const [currentLocation, setCurrentLocation] = useState({'lat': 33.4995687, 'lng': 126.5311287});
+
+  const loadCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(updateLocation)
+    } else {
+      alert('Geolocation is not supported by this browser.')
+    }
+  }
+
+  const updateLocation = (position: GeolocationPosition) => {
+    setCurrentLocation({'lat': position.coords.latitude, 'lng': position.coords.longitude})
+  }
+
   return (
     <div className="App">
       <header></header>
       <main>
         <aside>
-          <List items={data} />
+          <List items={data} currentLocation={currentLocation} />
         </aside>
         <section>
+          <button onClick={loadCurrentLocation}>Load my location</button>
+          <div>
+            My location: { currentLocation.lat }, { currentLocation.lng }
+          </div>
           <Map />
         </section>
       </main>
