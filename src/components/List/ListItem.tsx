@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import haversine from 'haversine-distance';
+import React from 'react';
 
-import type { Space, Location } from '../../types';
+import type { Space } from '../../types';
 
 import './ListItem.css';
 
-interface ListItemProps extends Space {
-  currentLocation: Location
-}
-
-const ListItem = ({id, type, imgSrc, name, lat, lng, currentLocation}: ListItemProps) => {
-  const [distance, setDistance] = useState(0);
-  useEffect(() => {
-    setDistance(+(haversine(currentLocation, {lat, lng}) * 0.001).toFixed(1))
-  }, [currentLocation]);
+const ListItem = ({id, type, imgSrc, name, loc, distance}: Space) => {
 
   return (
     <div className='ListItem'>

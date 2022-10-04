@@ -3,16 +3,15 @@ export interface Space {
   type: "coworking" | "cafe";
   name: string;
   imgSrc: string;
-  lat: number,
-  lng: number
+  loc: Location;
+  distance?: number;
 }
 
 export interface Location {
-  lat: number,
-  lng: number
+  lat: number;
+  lng: number;
 }
 
 export interface ListProps {
   items: Space[];
-  currentLocation: Location
 }
