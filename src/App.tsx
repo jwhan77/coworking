@@ -3,6 +3,7 @@ import haversine from 'haversine-distance';
 
 import List from './components/List/List';
 import Map from './components/Map/Map';
+import Info from './components/Info/Info';
 
 import { Space, Location } from './types';
 
@@ -15,7 +16,7 @@ function updateDistanceInData(data: Array<Space>, loc1: Location) {
   return data.map(loc => {
     loc.distance = calculateDistance(loc1, loc.loc);
     return loc
-  })
+  }).sort((a, b) => a.distance! - b.distance!)
 }
 
 function calculateDistance(loc1: Location, loc2: Location) {
@@ -28,6 +29,8 @@ function App() {
     const initialState = updateDistanceInData(data, currentLocation);
     return initialState
   });
+  const [selected, setSelected] = useState(0)
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     const newData = updateDistanceInData(data, currentLocation);
@@ -46,12 +49,21 @@ function App() {
     setCurrentLocation({'lat': position.coords.latitude, 'lng': position.coords.longitude})
   }
 
+  const openInfoModal = (id: number) => {
+    setSelected(id);
+    setShowInfo(true);
+  }
+
+  const closeInfoModal = () => {
+    setShowInfo(false);
+  }
+
   return (
     <div className="App">
       <header></header>
       <main>
         <aside>
-          <List items={myData} />
+          <List items={myData} handleSelect={openInfoModal} />
         </aside>
         <section>
           <button onClick={loadCurrentLocation}>Load my location</button>
@@ -59,6 +71,7 @@ function App() {
             My location: { currentLocation.lat }, { currentLocation.lng }
           </div>
           <Map />
+          <Info show={showInfo} {...myData.filter(d => d.id === selected)[0]} handleClose={closeInfoModal} />
         </section>
       </main>
     </div>

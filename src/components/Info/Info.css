@@ -1,0 +1,6 @@
+.InfoModal {
+  position: absolute;
+  width: calc(100% - 400px);
+  height: 100%;
+  top: 0px;
+}

@@ -14,4 +14,5 @@ export interface Location {
 
 export interface ListProps {
   items: Space[];
+  handleSelect: Function;
 }

@@ -10,7 +10,7 @@ interface PlaceType {
   cafe: boolean
 }
 
-const List = ({ items }: ListProps) => {
+const List = ({ items, handleSelect }: ListProps) => {
   const [checked, setChecked] = useState<PlaceType>({coworking: true, cafe: true});
   const selectedItems = items.filter(item => checked[item.type])
 
@@ -46,7 +46,7 @@ const List = ({ items }: ListProps) => {
       </div>
       <div className='items'>
         {selectedItems.map(item => {
-          return <ListItem key={item.id} {...item} />
+          return <ListItem key={item.id} {...item} handleClick={() => handleSelect(item.id)} />
         })}
       </div>
     </div>

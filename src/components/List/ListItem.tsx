@@ -4,16 +4,15 @@ import type { Space } from '../../types';
 
 import './ListItem.css';
 
-const ListItem = ({id, type, imgSrc, name, loc, distance}: Space) => {
-
+const ListItem = ({...props}) => {
   return (
-    <div className='ListItem'>
+    <div className='ListItem' onClick={props.handleClick}>
       <div className='photo'>
-        <img src={imgSrc} alt="" />
+        <img src={props.imgSrc} alt="" />
       </div>
       <div className='info'>
-        <div className='name'>{name}</div>
-        <div className='distance'>{distance}km</div>
+        <div className='name'>{props.name}</div>
+        <div className='distance'>{props.distance}km</div>
       </div>
       <div className='open'> &gt; </div>
     </div>
