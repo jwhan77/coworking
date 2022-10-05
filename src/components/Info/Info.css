@@ -1,0 +1,15 @@
+.InfoModal {
+  position: absolute;
+  width: calc(100% - 400px);
+  height: 100%;
+  top: 0px;
+}
+
+.InfoModal.hide {
+  display: none;
+}
+
+.InfoModal .icon {
+  width: 16px;
+  height: 16px;
+}

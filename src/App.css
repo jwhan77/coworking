@@ -1,8 +1,27 @@
 .App {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+main {
+  display: flex;
+}
+
+aside {
+  width: 400px;
+  height: 100vh;
+}
+
+section {
+  width: calc(100% - 400px);
+}
+
+section .container {
+  padding: 20px;
   text-align: center;
 }
 
-#map {
-  width: 600px;
-  height: 400px;
+section .container h1 {
+  font-size: 48px;
 }

@@ -1,0 +1,25 @@
+.Modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Modal .content {
+  background-color: #ffffff;
+  width: calc(100% - 150px);
+  height: calc(100% - 150px);
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.Modal .content .close {
+  cursor: pointer;
+  position: absolute;
+}
