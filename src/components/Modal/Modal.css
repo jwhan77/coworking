@@ -10,10 +10,6 @@
   justify-content: center;
 }
 
-.Modal.hide {
-  display: none;
-}
-
 .Modal .content {
   background-color: #ffffff;
   width: calc(100% - 150px);

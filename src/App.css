@@ -16,3 +16,12 @@ aside {
 section {
   width: calc(100% - 400px);
 }
+
+section .container {
+  padding: 20px;
+  text-align: center;
+}
+
+section .container h1 {
+  font-size: 48px;
+}

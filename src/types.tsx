@@ -4,7 +4,10 @@ export interface Space {
   name: string;
   imgSrc: string;
   loc: Location;
+  address: string;
+  hours?: Array<string>;
   distance?: number;
+  dayPrice?: number;
 }
 
 export interface Location {

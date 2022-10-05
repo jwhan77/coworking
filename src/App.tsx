@@ -66,11 +66,10 @@ function App() {
           <List items={myData} handleSelect={openInfoModal} />
         </aside>
         <section>
-          <button onClick={loadCurrentLocation}>Load my location</button>
-          <div>
-            My location: { currentLocation.lat }, { currentLocation.lng }
+          <div className='container'>
+            <h1>Coworking space in Jeju</h1> 
+            <Map handleLoad={loadCurrentLocation} loc={currentLocation} />
           </div>
-          <Map />
           <Info show={showInfo} {...myData.filter(d => d.id === selected)[0]} handleClose={closeInfoModal} />
         </section>
       </main>
