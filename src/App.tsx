@@ -7,12 +7,13 @@ import Info from './components/Info/Info';
 
 import { Space, Location } from './types';
 
-import { data } from './data'
+import data from './data/data.json'
 
 import './App.css';
 
+const spaceList = [...data] as Space[]
 
-function updateDistanceInData(data: Array<Space>, loc1: Location) {
+function updateDistanceInData(data: Space[], loc1: Location) {
   return data.map(loc => {
     loc.distance = calculateDistance(loc1, loc.loc);
     return loc
@@ -23,17 +24,19 @@ function calculateDistance(loc1: Location, loc2: Location) {
   return +(haversine(loc1, loc2) * 0.001).toFixed(1)
 }
 
+const INITIAL_LOCATION = {'lat': 33.4995687, 'lng': 126.5311287}
+
 function App() {
-  const [currentLocation, setCurrentLocation] = useState({'lat': 33.4995687, 'lng': 126.5311287});
+  const [currentLocation, setCurrentLocation] = useState(INITIAL_LOCATION);
   const [myData, setMyData] = useState(() => {
-    const initialState = updateDistanceInData(data, currentLocation);
+    const initialState = updateDistanceInData(spaceList, INITIAL_LOCATION);
     return initialState
   });
   const [selected, setSelected] = useState(0)
   const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
-    const newData = updateDistanceInData(data, currentLocation);
+    const newData = updateDistanceInData(spaceList, currentLocation);
     setMyData(newData)
   }, [currentLocation]);
 
@@ -60,7 +63,6 @@ function App() {
 
   return (
     <div className="App">
-      <header></header>
       <main>
         <aside>
           <List items={myData} handleSelect={openInfoModal} />

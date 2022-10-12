@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 
 import './List.css';
 
-import { ListProps } from '../../types';
+import { Space } from '../../types';
 import ListItem from './ListItem';
+
+type ListProps = {
+  items: Space[]
+  handleSelect: Function
+}
 
 interface PlaceType {
   coworking: boolean,
