@@ -25,3 +25,13 @@ section .container {
 section .container h1 {
   font-size: 48px;
 }
+
+.modal-backdrop {
+  width: calc(100% - 400px) !important;
+  left: 400px !important;
+}
+
+.modal {
+  width: calc(100% - 400px) !important;
+  left: 400px !important;
+}
