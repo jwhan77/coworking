@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Button } from 'react-bootstrap';
 
 import './Map.css'
 
@@ -40,7 +41,7 @@ const Map = ({...props}) => {
 
   return (
     <div className='Map'>
-      <button onClick={props.handleLoad}>Load my location</button>
+      <Button onClick={props.handleLoad}>Load my location</Button>
       <div id='map'></div>
     </div>
   )
