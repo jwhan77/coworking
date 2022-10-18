@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Button } from 'react-bootstrap';
 
 import './Map.css'
 
@@ -12,11 +13,16 @@ const Map = ({...props}) => {
         center: new naver.maps.LatLng(33.4995687, 126.5311287),
         zoom: 15
       });
-      const size = new naver.maps.Size(600, 400);
-      const marker = new naver.maps.Marker({
+      new naver.maps.Size(600, 400);
+      
+      new naver.maps.Marker({
         position: new naver.maps.LatLng(33.4995687, 126.5311287),
         map: map
-      })
+      }).setMap(map)
+      new naver.maps.Marker({
+        position: new naver.maps.LatLng(33.5330619, 126.6309226),
+        map: map
+      }).setMap(map)
     }
   }, [])
 
@@ -26,8 +32,8 @@ const Map = ({...props}) => {
       center: new naver.maps.LatLng(lat, lng),
       zoom: 15
     });
-    const size = new naver.maps.Size(600, 400);
-    const marker = new naver.maps.Marker({
+    new naver.maps.Size(600, 400);
+    new naver.maps.Marker({
       position: new naver.maps.LatLng(lat, lng),
       map: map
     })
@@ -35,7 +41,7 @@ const Map = ({...props}) => {
 
   return (
     <div className='Map'>
-      <button onClick={props.handleLoad}>Load my location</button>
+      <Button onClick={props.handleLoad}>Load my location</Button>
       <div id='map'></div>
     </div>
   )

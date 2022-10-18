@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 
 import './List.css';
 
-import { ListProps } from '../../types';
+import { Space } from '../../types';
 import ListItem from './ListItem';
+
+type ListProps = {
+  items: Space[]
+  handleSelect: Function
+}
 
 interface PlaceType {
   coworking: boolean,
@@ -46,7 +51,7 @@ const List = ({ items, handleSelect }: ListProps) => {
       </div>
       <div className='items'>
         {selectedItems.map(item => {
-          return <ListItem key={item.id} {...item} handleClick={() => handleSelect(item.id)} />
+          return <ListItem key={item.id} space={item} handleClick={() => handleSelect(item.id)} />
         })}
       </div>
     </div>
