@@ -18,12 +18,7 @@ section {
 }
 
 section .container {
-  padding: 20px;
-  text-align: center;
-}
-
-section .container h1 {
-  font-size: 48px;
+  padding: 0px;
 }
 
 .modal-backdrop {

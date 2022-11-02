@@ -69,7 +69,7 @@ function App() {
         </aside>
         <section>
           <div className='container'>
-            <Map handleLoad={loadCurrentLocation} loc={currentLocation} />
+            <Map handleLoad={loadCurrentLocation} loc={currentLocation} items={myData} />
           </div>
           <Info show={showInfo} {...myData.filter(d => d.id === selected)[0]} handleClose={closeInfoModal} />
         </section>
