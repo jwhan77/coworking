@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback } from 'react'
 import { useWindowSize } from 'usehooks-ts'
 import { Button } from 'react-bootstrap';
 
@@ -8,7 +8,8 @@ import './Map.css'
 
 type MarkersType = {
   id: number
-  marker: naver.maps.Marker
+  marker: naver.maps.Marker,
+  ev: naver.maps.MapEventListener
 }
 
 let map: (naver.maps.Map | null) = null;
@@ -60,25 +61,30 @@ const Map = ({...props}) => {
     })
   }, [props.selectedId])
 
-  const setMarkers = (map: naver.maps.Map, spaces: Space[]) => {
-    if (markers) {
-      for(let marker of markers) {
-        marker.marker.setMap(null);
+  const setMarkers = useCallback(
+    (map: naver.maps.Map, spaces: Space[]) => {
+      if (markers) {
+        for(let marker of markers) {
+          marker.marker.setMap(null);
+          naver.maps.Event.removeListener(marker.ev);
+        }
+        markers = [];
       }
-      markers = [];
-    }
-    for(let space of spaces) {
-      const marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
-        map: map
-      });
-      marker.setMap(map);
-      naver.maps.Event.addListener(marker, "click", function(e) {
-        props.openInfoModal(space.id);
-      })
-      markers.push({id: space.id, marker: marker});
-    }
-  }
+      for(let space of spaces) {
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
+          map: map
+        });
+        marker.setMap(map);
+        const ev = naver.maps.Event.addListener(marker, "click", function(e: MouseEvent) {
+          props.openInfoModal(space.id);
+        })
+        markers.push({id: space.id, marker: marker, ev: ev});
+      }
+    },
+    [props.selectedId]
+  );
+    
 
   return (
     <div className='Map'>
