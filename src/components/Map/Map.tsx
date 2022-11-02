@@ -2,9 +2,20 @@ import React, { useEffect, useRef } from 'react'
 import { useWindowSize } from 'usehooks-ts'
 import { Button } from 'react-bootstrap';
 
+import { Space } from '../../types';
+
 import './Map.css'
 
 let map: (naver.maps.Map | null) = null;
+
+function setMarkers(map: naver.maps.Map, spaces: Space[]) {
+  for(let space of spaces) {
+    const marker = new naver.maps.Marker({
+      position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
+      map: map
+    }).setMap(map);
+  }
+}
 
 const Map = ({...props}) => {
   const { width, height } = useWindowSize()
@@ -16,15 +27,7 @@ const Map = ({...props}) => {
         center: new naver.maps.LatLng(33.4995687, 126.5311287),
         zoom: 15
       });
-      const sizeCompare = new naver.maps.Size(window.innerWidth - 400, window.innerHeight);
-      new naver.maps.Marker({
-        position: new naver.maps.LatLng(33.4995687, 126.5311287),
-        map: map
-      }).setMap(map)
-      new naver.maps.Marker({
-        position: new naver.maps.LatLng(33.5330619, 126.6309226),
-        map: map
-      }).setMap(map)
+      new naver.maps.Size(window.innerWidth - 400, window.innerHeight);
     }
   }, [])
 
@@ -48,6 +51,12 @@ const Map = ({...props}) => {
       mapDiv.style.height = `${height}px`
     }
   }, [width, height]);
+
+  useEffect(() => {
+    if (map !== null) {
+      setMarkers(map, props.items);
+    }
+  }, [props.items])
 
   return (
     <div className='Map'>
