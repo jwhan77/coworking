@@ -13,3 +13,8 @@ export type Location = {
   lat: number
   lng: number
 }
+
+export type PlaceType = {
+  coworking: boolean
+  cafe: boolean
+}

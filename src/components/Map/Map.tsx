@@ -6,16 +6,13 @@ import { Space } from '../../types';
 
 import './Map.css'
 
-let map: (naver.maps.Map | null) = null;
-
-function setMarkers(map: naver.maps.Map, spaces: Space[]) {
-  for(let space of spaces) {
-    const marker = new naver.maps.Marker({
-      position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
-      map: map
-    }).setMap(map);
-  }
+type MarkersType = {
+  id: number
+  marker: naver.maps.Marker
 }
+
+let map: (naver.maps.Map | null) = null;
+let markers: MarkersType[] = [];
 
 const Map = ({...props}) => {
   const { width, height } = useWindowSize()
@@ -33,21 +30,14 @@ const Map = ({...props}) => {
 
   useEffect(() => {
     const { lat, lng } = props.loc
-    map = new naver.maps.Map('map', {
-      center: new naver.maps.LatLng(lat, lng),
-      zoom: 15
-    });
-    new naver.maps.Size(width ? width : window.innerWidth - 400, height ? height : window.innerHeight);
-    new naver.maps.Marker({
-      position: new naver.maps.LatLng(lat, lng),
-      map: map
-    })
+    if(map === null) return;
+    map.setCenter(new naver.maps.LatLng(lat, lng));
   }, [props.loc])
 
   useEffect(() => {
-    if(mapRef !== null) {
+    if(mapRef !== null && width && height) {
       const mapDiv = mapRef.current as unknown as HTMLDivElement;
-      mapDiv.style.width = `${width}px`
+      mapDiv.style.width = `${width - 400}px`
       mapDiv.style.height = `${height}px`
     }
   }, [width, height]);
@@ -57,6 +47,38 @@ const Map = ({...props}) => {
       setMarkers(map, props.items);
     }
   }, [props.items])
+
+  useEffect(() => {
+    if(props.selectedId === -1) return;
+    const marker = markers.filter(m => m.id === props.selectedId)[0];
+    marker.marker.setIcon({
+      url: "http://static.naver.net/maps/mantle/2x/marker-default.png",
+      size: {
+        width: 44,
+        height: 66
+      }
+    })
+  }, [props.selectedId])
+
+  const setMarkers = (map: naver.maps.Map, spaces: Space[]) => {
+    if (markers) {
+      for(let marker of markers) {
+        marker.marker.setMap(null);
+      }
+      markers = [];
+    }
+    for(let space of spaces) {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
+        map: map
+      });
+      marker.setMap(map);
+      naver.maps.Event.addListener(marker, "click", function(e) {
+        props.openInfoModal(space.id);
+      })
+      markers.push({id: space.id, marker: marker});
+    }
+  }
 
   return (
     <div className='Map'>

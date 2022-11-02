@@ -5,7 +5,7 @@ import List from './components/List/List';
 import Map from './components/Map/Map';
 import Info from './components/Info/Info';
 
-import { Space, Location } from './types';
+import { Space, Location, PlaceType } from './types';
 
 import data from './data/data.json'
 
@@ -28,12 +28,19 @@ const INITIAL_LOCATION = {'lat': 33.4995687, 'lng': 126.5311287}
 
 function App() {
   const [currentLocation, setCurrentLocation] = useState(INITIAL_LOCATION);
+  const [centerLoc, setCenterLoc] = useState({'lat': 0, 'lng': 0});
   const [myData, setMyData] = useState(() => {
     const initialState = updateDistanceInData(spaceList, INITIAL_LOCATION);
     return initialState
   });
-  const [selected, setSelected] = useState(0)
+  const [checked, setChecked] = useState<PlaceType>({coworking: true, cafe: true});
+  const [selected, setSelected] = useState(-1);
   const [showInfo, setShowInfo] = useState(false);
+
+  const selectedItems = myData.filter(item => checked[item.type])
+  const selectedItem = selected === -1 ? myData.filter(d => d.id === 0)[0]: myData.filter(d => d.id === selected)[0];
+
+  const mapCenter = centerLoc.lat && centerLoc.lng ? centerLoc : currentLocation
 
   useEffect(() => {
     const newData = updateDistanceInData(spaceList, currentLocation);
@@ -52,6 +59,11 @@ function App() {
     setCurrentLocation({'lat': position.coords.latitude, 'lng': position.coords.longitude})
   }
 
+  const handleSelectListItem = (id: number) => {
+    setSelected(id);
+    setCenterLoc(myData.filter(d => d.id === id)[0].loc);
+  }
+
   const openInfoModal = (id: number) => {
     setSelected(id);
     setShowInfo(true);
@@ -61,17 +73,29 @@ function App() {
     setShowInfo(false);
   }
 
+  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedChecked = { ...checked };
+    const selectedType = e.target.id.split('type-')[1];
+    updatedChecked[selectedType as keyof PlaceType] = !updatedChecked[selectedType as keyof PlaceType];
+    setChecked(updatedChecked)
+  }
+
   return (
     <div className="App">
       <main>
         <aside>
-          <List items={myData} handleSelect={openInfoModal} />
+          <List
+            checked={checked}
+            selectedItems={selectedItems}
+            handleChangeType={handleChangeType}
+            handleSelect={handleSelectListItem}
+          />
         </aside>
         <section>
           <div className='container'>
-            <Map handleLoad={loadCurrentLocation} loc={currentLocation} items={myData} />
+            <Map handleLoad={loadCurrentLocation} loc={mapCenter} items={selectedItems} selectedId={selected} openInfoModal={openInfoModal} />
           </div>
-          <Info show={showInfo} {...myData.filter(d => d.id === selected)[0]} handleClose={closeInfoModal} />
+          <Info show={showInfo} {...selectedItem} handleClose={closeInfoModal} />
         </section>
       </main>
     </div>
