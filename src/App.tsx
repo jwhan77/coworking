@@ -5,7 +5,7 @@ import List from './components/List/List';
 import Map from './components/Map/Map';
 import Info from './components/Info/Info';
 
-import { Space, Location } from './types';
+import { Space, Location, PlaceType } from './types';
 
 import data from './data/data.json'
 
@@ -32,8 +32,11 @@ function App() {
     const initialState = updateDistanceInData(spaceList, INITIAL_LOCATION);
     return initialState
   });
+  const [checked, setChecked] = useState<PlaceType>({coworking: true, cafe: true});
   const [selected, setSelected] = useState(0)
   const [showInfo, setShowInfo] = useState(false);
+
+  const selectedItems = myData.filter(item => checked[item.type])
 
   useEffect(() => {
     const newData = updateDistanceInData(spaceList, currentLocation);
@@ -61,15 +64,27 @@ function App() {
     setShowInfo(false);
   }
 
+  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedChecked = { ...checked };
+    const selectedType = e.target.id.split('type-')[1];
+    updatedChecked[selectedType as keyof PlaceType] = !updatedChecked[selectedType as keyof PlaceType];
+    setChecked(updatedChecked)
+  }
+
   return (
     <div className="App">
       <main>
         <aside>
-          <List items={myData} handleSelect={openInfoModal} />
+          <List
+            checked={checked}
+            selectedItems={selectedItems}
+            handleChangeType={handleChangeType}
+            handleSelect={openInfoModal}
+          />
         </aside>
         <section>
           <div className='container'>
-            <Map handleLoad={loadCurrentLocation} loc={currentLocation} items={myData} />
+            <Map handleLoad={loadCurrentLocation} loc={currentLocation} items={selectedItems} />
           </div>
           <Info show={showInfo} {...myData.filter(d => d.id === selected)[0]} handleClose={closeInfoModal} />
         </section>

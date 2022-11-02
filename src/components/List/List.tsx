@@ -2,30 +2,17 @@ import React, { useState } from 'react'
 
 import './List.css';
 
-import { Space } from '../../types';
+import { Space, PlaceType } from '../../types';
 import ListItem from './ListItem';
 
 type ListProps = {
-  items: Space[]
+  checked: PlaceType
+  selectedItems: Space[],
+  handleChangeType: React.ChangeEventHandler<HTMLInputElement>,
   handleSelect: Function
 }
 
-interface PlaceType {
-  coworking: boolean,
-  cafe: boolean
-}
-
-const List = ({ items, handleSelect }: ListProps) => {
-  const [checked, setChecked] = useState<PlaceType>({coworking: true, cafe: true});
-  const selectedItems = items.filter(item => checked[item.type])
-
-  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedChecked = { ...checked };
-    const selectedType = e.target.id.split('type-')[1];
-    updatedChecked[selectedType as keyof PlaceType] = !updatedChecked[selectedType as keyof PlaceType];
-    setChecked(updatedChecked)
-  }
-
+const List = ({ checked, selectedItems, handleChangeType, handleSelect }: ListProps) => {
   return (
     <div className='List'>
       <div className='SelectType'>

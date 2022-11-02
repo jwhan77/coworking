@@ -7,13 +7,22 @@ import { Space } from '../../types';
 import './Map.css'
 
 let map: (naver.maps.Map | null) = null;
+let markers: naver.maps.Marker[] = [];
 
 function setMarkers(map: naver.maps.Map, spaces: Space[]) {
+  if (markers) {
+    for(let marker of markers) {
+      marker.setMap(null);
+    }
+    markers = [];
+  }
   for(let space of spaces) {
     const marker = new naver.maps.Marker({
       position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
       map: map
-    }).setMap(map);
+    });
+    marker.setMap(map);
+    markers.push(marker);
   }
 }
 
@@ -32,12 +41,8 @@ const Map = ({...props}) => {
   }, [])
 
   useEffect(() => {
+    if(map === null) return;
     const { lat, lng } = props.loc
-    map = new naver.maps.Map('map', {
-      center: new naver.maps.LatLng(lat, lng),
-      zoom: 15
-    });
-    new naver.maps.Size(width ? width : window.innerWidth - 400, height ? height : window.innerHeight);
     new naver.maps.Marker({
       position: new naver.maps.LatLng(lat, lng),
       map: map
@@ -45,9 +50,9 @@ const Map = ({...props}) => {
   }, [props.loc])
 
   useEffect(() => {
-    if(mapRef !== null) {
+    if(mapRef !== null && width && height) {
       const mapDiv = mapRef.current as unknown as HTMLDivElement;
-      mapDiv.style.width = `${width}px`
+      mapDiv.style.width = `${width - 400}px`
       mapDiv.style.height = `${height}px`
     }
   }, [width, height]);
