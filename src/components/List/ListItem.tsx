@@ -17,7 +17,7 @@ const ListItem = ({ space, handleClick}: ListItemProps) => {
         <img src={spaceImg} alt="" />
       </div>
       <div className='info'>
-        <div className='name'>{space.name}</div>
+        <div className='name'>{space.name.length > 10 ? `${space.name.substring(0, 10)}...` : space.name}</div>
         <div className='distance'>{space.distance}km</div>
       </div>
       <div className='open'> &gt; </div>
