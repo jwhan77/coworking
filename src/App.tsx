@@ -37,9 +37,7 @@ function App() {
 
   const fetchData = async() => {
     const response = await fetch('/.netlify/functions/getData')
-    console.log(response);
     const data = await response.json();
-    console.log(data); // {message: 'Hello world'}
 
     const spaceList = [...data] as Space[]
 
