@@ -1,6 +1,5 @@
 {
   "name": "coworking",
-  "homepage": "https://jwhan77.github.io/coworking",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,6 +13,7 @@
     "bootstrap": "^5.2.2",
     "gh-pages": "^4.0.0",
     "haversine-distance": "^1.2.1",
+    "mongodb": "^4.11.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
@@ -27,6 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "dev": "netlify dev",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "storybook": "start-storybook -p 6006 -s public",
@@ -73,6 +74,7 @@
     "@storybook/testing-library": "^0.0.13",
     "@types/navermaps": "^3.0.17",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "netlify-cli": "^12.1.0",
     "prop-types": "^15.8.1",
     "webpack": "^5.74.0"
   }
