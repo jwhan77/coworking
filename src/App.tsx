@@ -42,6 +42,17 @@ function App() {
 
   const mapCenter = centerLoc.lat && centerLoc.lng ? centerLoc : currentLocation
 
+  const fetchData = async() => {
+    const response = await fetch('/.netlify/functions/helloWorld')
+    console.log(response);
+    const result = await response.json();
+    console.log(result); // {message: 'Hello world'}
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
   useEffect(() => {
     const newData = updateDistanceInData(spaceList, currentLocation);
     setMyData(newData)
