@@ -7,11 +7,7 @@ import Info from './components/Info/Info';
 
 import { Space, Location, PlaceType } from './types';
 
-import data from './data/data.json'
-
 import './App.css';
-
-const spaceList = [...data] as Space[]
 
 function updateDistanceInData(data: Space[], loc1: Location) {
   return data.map(loc => {
@@ -29,24 +25,26 @@ const INITIAL_LOCATION = {'lat': 33.4995687, 'lng': 126.5311287}
 function App() {
   const [currentLocation, setCurrentLocation] = useState(INITIAL_LOCATION);
   const [centerLoc, setCenterLoc] = useState({'lat': 0, 'lng': 0});
-  const [myData, setMyData] = useState(() => {
-    const initialState = updateDistanceInData(spaceList, INITIAL_LOCATION);
-    return initialState
-  });
+  const [myData, setMyData] = useState<(Space[] | null)>(null);
   const [checked, setChecked] = useState<PlaceType>({coworking: true, cafe: true});
   const [selected, setSelected] = useState(-1);
+  const [selectedItem, setSelectedItem] = useState<(Space | null)>(null);
   const [showInfo, setShowInfo] = useState(false);
 
-  const selectedItems = myData.filter(item => checked[item.type])
-  const selectedItem = selected === -1 ? myData.filter(d => d.id === 0)[0]: myData.filter(d => d.id === selected)[0];
+  const selectedItems = myData ? myData.filter(item => checked[item.type]) : []
 
   const mapCenter = centerLoc.lat && centerLoc.lng ? centerLoc : currentLocation
 
   const fetchData = async() => {
-    const response = await fetch('/.netlify/functions/helloWorld')
+    const response = await fetch('/.netlify/functions/getData')
     console.log(response);
-    const result = await response.json();
-    console.log(result); // {message: 'Hello world'}
+    const data = await response.json();
+    console.log(data); // {message: 'Hello world'}
+
+    const spaceList = [...data] as Space[]
+
+    const initialState = updateDistanceInData(spaceList, INITIAL_LOCATION);
+    setMyData(initialState);
   }
 
   useEffect(() => {
@@ -54,9 +52,16 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const newData = updateDistanceInData(spaceList, currentLocation);
+    if(!myData) return;
+    const newData = updateDistanceInData([...myData], currentLocation);
     setMyData(newData)
   }, [currentLocation]);
+
+  useEffect(() => {
+    if(!myData) return;
+    const newSelectedItem = selected === -1 ? myData.filter(d => d.id === 0)[0]: myData.filter(d => d.id === selected)[0];
+    setSelectedItem(newSelectedItem);
+  }, [selected, myData])
 
   const loadCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -72,7 +77,7 @@ function App() {
 
   const handleSelectListItem = (id: number) => {
     setSelected(id);
-    setCenterLoc(myData.filter(d => d.id === id)[0].loc);
+    setCenterLoc(myData!.filter(d => d.id === id)[0].loc);
   }
 
   const openInfoModal = (id: number) => {
@@ -106,7 +111,9 @@ function App() {
           <div className='container'>
             <Map handleLoad={loadCurrentLocation} loc={mapCenter} items={selectedItems} selectedId={selected} openInfoModal={openInfoModal} />
           </div>
-          <Info show={showInfo} {...selectedItem} handleClose={closeInfoModal} />
+          {selectedItem && (
+            <Info show={showInfo} {...selectedItem} handleClose={closeInfoModal} />
+          )}
         </section>
       </main>
     </div>
