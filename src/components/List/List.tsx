@@ -1,18 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { toggleSpaceType, setSelectedId } from '../../features/space/spaceSlice';
+
+import ListItem from './ListItem';
 
 import './List.css';
 
-import { Space, PlaceType } from '../../types';
-import ListItem from './ListItem';
+const List = () => {
+  const dispatch = useAppDispatch();
+  const { selectedItems, spaceType } = useAppSelector((store) => store.space);
 
-type ListProps = {
-  checked: PlaceType
-  selectedItems: Space[],
-  handleChangeType: React.ChangeEventHandler<HTMLInputElement>,
-  handleSelect: Function
-}
+  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const type = e.target.id.split('type-')[1];
+    dispatch(toggleSpaceType(type))
+  }
 
-const List = ({ checked, selectedItems, handleChangeType, handleSelect }: ListProps) => {
+  const handleSelect = (id: number) => {
+    dispatch(setSelectedId(id));
+  }
+
   return (
     <div className='List'>
       <div className='SelectType'>
@@ -20,7 +26,7 @@ const List = ({ checked, selectedItems, handleChangeType, handleSelect }: ListPr
           <input
             type="checkbox"
             id="type-coworking"
-            checked={checked.coworking}
+            checked={spaceType.coworking}
             onChange={handleChangeType}
           />
           <label htmlFor='type-coworking'>Coworking</label>
@@ -30,7 +36,7 @@ const List = ({ checked, selectedItems, handleChangeType, handleSelect }: ListPr
           <input
             type="checkbox"
             id="type-cafe"
-            checked={checked.cafe}
+            checked={spaceType.cafe}
             onChange={handleChangeType}
           />
           <label htmlFor='type-cafe'>Cafe</label>

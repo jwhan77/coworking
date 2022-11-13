@@ -21,14 +21,18 @@ function calculateDistance(loc1: Location, loc2: Location) {
 
 interface SpaceState {
   spaceItems: Space[]
+  selectedItems: Space[]
   spaceType: PlaceType
+  selectedId: number
   selectedSpace: (Space | null)
   isLoading: boolean
 }
 
 const initialState: SpaceState = {
   spaceItems: [],
+  selectedItems: [],
   spaceType: {coworking: true, cafe: true},
+  selectedId: -1,
   selectedSpace: null,
   isLoading: true
 };
@@ -59,7 +63,27 @@ const spaceSlice = createSlice({
   name: 'space',
   initialState,
   reducers: {
-
+    setSelectedId: (state, action: PayloadAction<number>) => {
+      state.selectedId = action.payload;
+    },
+    toggleSpaceType: (state, action: PayloadAction<string>) => {
+      const type = action.payload;
+      if (type === "coworking") {
+        state.spaceType = { ...state.spaceType, coworking: !state.spaceType.coworking }
+      } else if (type === "cafe") {
+        state.spaceType = { ...state.spaceType, cafe: !state.spaceType.cafe }
+      }
+    },
+    calculateSelectedItems: (state) => {
+      state.selectedItems = state.spaceItems.filter(item => state.spaceType[item.type])
+    },
+    calculateSelectedItem: (state) => {
+      if (state.selectedId === -1) {
+        state.selectedSpace = null
+      } else {
+        state.selectedSpace = state.selectedItems.filter(item => item.id === state.selectedId)[0]
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getSpaceItems.pending, (state, action) => {
@@ -68,6 +92,7 @@ const spaceSlice = createSlice({
     builder.addCase(getSpaceItems.fulfilled, (state, action) => {
       state.isLoading = false;
       state.spaceItems = action.payload;
+      state.selectedItems = action.payload;
     })
     builder.addCase(getSpaceItems.rejected, (state, action) => {
       console.log(action);
@@ -76,6 +101,11 @@ const spaceSlice = createSlice({
   }
 });
 
-// export const { } = spaceSlice.actions;
+export const {
+  setSelectedId,
+  calculateSelectedItems,
+  calculateSelectedItem,
+  toggleSpaceType
+} = spaceSlice.actions;
 
 export default spaceSlice.reducer;

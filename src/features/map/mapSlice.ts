@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { Location } from "../../types"
 
 interface MapState {
@@ -18,10 +19,15 @@ const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-
+    setCurrentPos: (state, action: PayloadAction<Location>) => {
+      state.currentPos = action.payload
+    },
+    setCenterPos: (state, action: PayloadAction<Location>) => {
+      state.centerPos = action.payload
+    }
   }
 });
 
-// export const { } = mapSlice.actions;
+export const { setCurrentPos, setCenterPos } = mapSlice.actions;
 
 export default mapSlice.reducer;

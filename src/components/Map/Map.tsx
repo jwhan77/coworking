@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useCallback } from 'react'
 import { useWindowSize } from 'usehooks-ts'
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { setSelectedId } from '../../features/space/spaceSlice';
+import { setCurrentPos } from '../../features/map/mapSlice';
+import { openModal } from '../../features/modal/modalSlice';
 import { Button } from 'react-bootstrap';
 
 import { Space } from '../../types';
@@ -15,7 +19,11 @@ type MarkersType = {
 let map: (naver.maps.Map | null) = null;
 let markers: MarkersType[] = [];
 
-const Map = ({...props}) => {
+const Map = () => {
+  const dispatch = useAppDispatch();
+  const { selectedItems, selectedId } = useAppSelector((store) => store.space);
+  const { centerPos } = useAppSelector((store) => store.map);
+
   const { width, height } = useWindowSize()
   const mapRef = useRef(null);
 
@@ -30,10 +38,10 @@ const Map = ({...props}) => {
   }, [])
 
   useEffect(() => {
-    const { lat, lng } = props.loc
+    const { lat, lng } = centerPos
     if(map === null) return;
     map.setCenter(new naver.maps.LatLng(lat, lng));
-  }, [props.loc])
+  }, [centerPos])
 
   useEffect(() => {
     if(mapRef !== null && width && height) {
@@ -45,13 +53,13 @@ const Map = ({...props}) => {
 
   useEffect(() => {
     if (map !== null) {
-      setMarkers(map, props.items);
+      setMarkers(map, selectedItems);
     }
-  }, [props.items])
+  }, [selectedItems])
 
   useEffect(() => {
-    if(props.selectedId === -1) return;
-    const marker = markers.filter(m => m.id === props.selectedId)[0];
+    if(selectedId === -1) return;
+    const marker = markers.filter(m => m.id === selectedId)[0];
     marker.marker.setIcon({
       url: "http://static.naver.net/maps/mantle/2x/marker-default.png",
       size: {
@@ -59,7 +67,7 @@ const Map = ({...props}) => {
         height: 66
       }
     })
-  }, [props.selectedId])
+  }, [selectedId])
 
   const setMarkers = useCallback(
     (map: naver.maps.Map, spaces: Space[]) => {
@@ -77,18 +85,31 @@ const Map = ({...props}) => {
         });
         marker.setMap(map);
         const ev = naver.maps.Event.addListener(marker, "click", function(e: MouseEvent) {
-          props.openInfoModal(space.id);
+          dispatch(setSelectedId(space.id))
+          dispatch(openModal())
         })
         markers.push({id: space.id, marker: marker, ev: ev});
       }
     },
-    [props.selectedId]
+    [selectedId]
   );
     
+  const handleLoad = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(updateLocation)
+    } else {
+      alert('Geolocation is not supported by this browser.')
+    }
+  }
+
+  const updateLocation = (position: GeolocationPosition) => {
+    const pos = {'lat': position.coords.latitude, 'lng': position.coords.longitude}
+    dispatch(setCurrentPos(pos));
+  }
 
   return (
     <div className='Map'>
-      <Button className="loading" onClick={props.handleLoad}>Load my location</Button>
+      <Button className="loading" onClick={handleLoad}>Load my location</Button>
       <div id='map' ref={mapRef}></div>
     </div>
   )
