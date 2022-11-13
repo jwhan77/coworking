@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useAppSelector, useAppDispatch } from './hooks';
+import { getSpaceItems } from './features/space/spaceSlice';
+
 import haversine from 'haversine-distance';
 
 import List from './components/List/List';
@@ -23,6 +26,10 @@ function calculateDistance(loc1: Location, loc2: Location) {
 const INITIAL_LOCATION = {'lat': 33.4995687, 'lng': 126.5311287}
 
 function App() {
+  const { spaceItems } = useAppSelector((store) => store.space);
+  const { currentPos } = useAppSelector((store) => store.map);
+  const dispatch = useAppDispatch();
+
   const [currentLocation, setCurrentLocation] = useState(INITIAL_LOCATION);
   const [centerLoc, setCenterLoc] = useState({'lat': 0, 'lng': 0});
   const [myData, setMyData] = useState<(Space[] | null)>(null);
@@ -46,7 +53,9 @@ function App() {
   }
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
+
+    dispatch(getSpaceItems(1));    
   }, [])
 
   useEffect(() => {
@@ -100,7 +109,7 @@ function App() {
         <aside>
           <List
             checked={checked}
-            selectedItems={selectedItems}
+            selectedItems={spaceItems}
             handleChangeType={handleChangeType}
             handleSelect={handleSelectListItem}
           />
