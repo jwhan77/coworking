@@ -10,13 +10,14 @@ import { Space } from '../../types';
 
 import './Map.css'
 
+const naver = window.naver;
 type MarkersType = {
   id: number
-  marker: naver.maps.Marker,
-  ev: naver.maps.MapEventListener
+  marker: typeof naver.maps.Marker
+  ev: typeof naver.maps.MapEventListener
 }
 
-let map: (naver.maps.Map | null) = null;
+let map: (typeof naver.maps.Map | null) = null;
 let markers: MarkersType[] = [];
 
 const Map = () => {
@@ -70,7 +71,7 @@ const Map = () => {
   }, [selectedId])
 
   const setMarkers = useCallback(
-    (map: naver.maps.Map, spaces: Space[]) => {
+    (map: typeof naver.maps.Map, spaces: Space[]) => {
       if (markers) {
         for(let marker of markers) {
           marker.marker.setMap(null);
