@@ -23,6 +23,10 @@ export default defineConfig(({mode}) => {
       react(),
       viteTsconfigPaths(),
       svgrPlugin()
-    ]
+    ],
+    build: {
+      outDir: './build',
+      emptyOutDir: true
+    }
   }
 });
