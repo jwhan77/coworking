@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useCallback } from 'react'
 import { useWindowSize } from 'usehooks-ts'
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { setSelectedId } from '../../features/space/spaceSlice';
-import { setCurrentPos } from '../../features/map/mapSlice';
+import { setSelectedId, calculateSelectedItem } from '../../features/space/spaceSlice';
+import { setCurrentPos, setCenterPos } from '../../features/map/mapSlice';
 import { openModal } from '../../features/modal/modalSlice';
 import { Button } from 'react-bootstrap';
 
@@ -22,7 +22,7 @@ let markers: MarkersType[] = [];
 
 const Map = () => {
   const dispatch = useAppDispatch();
-  const { selectedItems, selectedId } = useAppSelector((store) => store.space);
+  const { spaceItems, selectedItems, selectedId, selectedSpace } = useAppSelector((store) => store.space);
   const { centerPos } = useAppSelector((store) => store.map);
 
   const { width, height } = useWindowSize()
@@ -60,40 +60,47 @@ const Map = () => {
 
   useEffect(() => {
     if(selectedId === -1) return;
-    const marker = markers.filter(m => m.id === selectedId)[0];
-    marker.marker.setIcon({
-      url: "http://static.naver.net/maps/mantle/2x/marker-default.png",
-      size: {
-        width: 44,
-        height: 66
-      }
-    })
+    dispatch(calculateSelectedItem())
+    const pos = spaceItems.filter(space => space.id === selectedId)[0].loc;
+    dispatch(setCenterPos(pos))
+    dispatch(openModal())
   }, [selectedId])
 
-  const setMarkers = useCallback(
-    (map: typeof naver.maps.Map, spaces: Space[]) => {
-      if (markers) {
-        for(let marker of markers) {
-          marker.marker.setMap(null);
-          naver.maps.Event.removeListener(marker.ev);
-        }
-        markers = [];
+  const setMarkers = (map: typeof naver.maps.Map, spaces: Space[]) => {
+    if (markers) {
+      for(let marker of markers) {
+        marker.marker.setMap(null);
+        naver.maps.Event.removeListener(marker.ev);
       }
-      for(let space of spaces) {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
-          map: map
-        });
-        marker.setMap(map);
-        const ev = naver.maps.Event.addListener(marker, "click", function(e: MouseEvent) {
-          dispatch(setSelectedId(space.id))
-          dispatch(openModal())
-        })
-        markers.push({id: space.id, marker: marker, ev: ev});
-      }
-    },
-    [selectedId]
-  );
+      markers = [];
+    }
+    for(let space of spaces) {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(space.loc.lat, space.loc.lng),
+        map: map
+      });
+      const contentString = [
+        '<div class="marker-tooltip">',
+          space.name,
+        '</div>'
+      ].join('');
+      const infoTooltip = new naver.maps.InfoWindow({
+        content: contentString
+      });
+      naver.maps.Event.addListener(marker, "mouseover", function(e: MouseEvent) {
+        infoTooltip.open(map, marker);
+      }) 
+      naver.maps.Event.addListener(marker, "mouseout", function(e: MouseEvent) {
+        infoTooltip.close();
+      })
+      marker.setMap(map);
+      const ev = naver.maps.Event.addListener(marker, "click", function(e: MouseEvent) {
+        dispatch(setSelectedId(space.id))
+        dispatch(openModal())
+      })
+      markers.push({id: space.id, marker: marker, ev: ev});
+    }
+  }
     
   const handleLoad = () => {
     if (navigator.geolocation) {
