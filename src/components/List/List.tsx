@@ -29,7 +29,7 @@ const List = () => {
             checked={spaceType.coworking}
             onChange={handleChangeType}
           />
-          <label htmlFor='type-coworking'>Coworking</label>
+          <label htmlFor='type-coworking'>Shared Office</label>
         </div>
 
         <div>
